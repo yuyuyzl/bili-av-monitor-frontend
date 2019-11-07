@@ -1,3 +1,6 @@
+## 哔哩哔哩视频监视器前端
+在使用之前，你可能需要修改config.js中的apiUrl为你部署的api的url。
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
