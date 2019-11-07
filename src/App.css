@@ -93,12 +93,13 @@
 
 .options-buttons .icon .iconinner{
   position: absolute;
-  margin: 0;
+  margin: -1px 0;
   padding: 0;
   width: 20px;
   height: 20px;
   z-index: 101;
   transform: translateX(-50%) translateY(-50%);
+    line-height: 20px;
 }
 
 .options-buttons:hover{
@@ -114,7 +115,6 @@
   line-height: 32px;
   width: 72px;
   text-align: center;
-
   font-size: 14px;
   color: #FFFFFF;
   display: block;
