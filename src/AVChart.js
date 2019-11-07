@@ -15,17 +15,35 @@ class AVChart extends React.Component{
             Axios({url: config.apiUrl+(config.apiUrl.endsWith("/")?"":"/")+this.props.av+"?item="+this.props.item.join(","), responseType: "json"}).then(data => {
                     console.log(data.data);
                     const category =this.props.item.map(a=>a);
+                    const categoryTrans={
+                        "time":"时间",
+                        "like":"喜欢",
+                        "favorite":"收藏",
+                        "coin":"投币",
+                        "view":"播放"
+                    }
                     let timeStart = category[0] === 'time';
                     let series;
                     if (timeStart) {
                         category.shift();
                         series = category.map(name => {
                             return {
-                                name: name,
+                                name: categoryTrans[name],
                                 type: 'line',
                                 showSymbol: false,
                                 hoverAnimation: false,
-                                data: []
+                                data: [],
+                                yAxisIndex:name==="view"?0:1,
+                                markLine: {
+                                    silent:true,
+                                    label:{
+                                        formatter: '{c}{b}',
+                                    },
+                                    symbol:name==="view"?["emptyCircle","none"]:["none","emptyCircle"],
+                                    data: [
+                                        {type: 'max', name: categoryTrans[name]}
+                                    ]
+                                }
                             }
                         });
                         data.data.forEach(line => {
@@ -42,15 +60,28 @@ class AVChart extends React.Component{
                         }]
                     }
                     const option = {
+                        grid:{
+                            bottom: 80
+                        },
                         tooltip: {
                             trigger: 'axis',
                             axisPointer: {
                                 animation: false
                             }
                         },
-                        yAxis: {
-                            type: 'value'
+                        legend: {
+                            data: category.map(name=>categoryTrans[name]),
+                            orient: "vertical",
+                            left:"1%",
+                            top:"middle"
                         },
+                        yAxis: [{
+                            name:"播放",
+                            type: 'value'
+                        },{
+                            name:"其他",
+                            type: 'value'
+                        }],
                         xAxis: {
                             type: timeStart?'time':"value"
                         },

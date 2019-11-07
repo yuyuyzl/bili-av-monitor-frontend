@@ -26,6 +26,8 @@
   letter-spacing: 0.05em;
 }
 .sider a{
+  position: relative;
+  z-index: 100;
   box-sizing: border-box;
   width: 100%;
   display: block;
@@ -34,11 +36,19 @@
   height: 36px;
   line-height: 36px;
   font-size: 14px;
-  padding-left: 32px;
+  padding: 0 32px;
+  white-space:nowrap;
+  word-break:keep-all;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  transition: all 0.5s;
+  min-width: 100%;
 }
 
 .sider a:hover{
-  background: #666;
+  background: #bbb;
+  width: max-content;
+  box-shadow: 0 0 5px #00000033;
 }
 
 .sider .selected{

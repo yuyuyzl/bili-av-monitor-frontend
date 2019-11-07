@@ -37,10 +37,10 @@ class Sider extends React.Component{
     componentDidMount() {
         const fetchAndDisplay=()=> {
             Axios({
-                url: config.apiUrl + (config.apiUrl.endsWith("/") ? "" : "/") + "monitor?item=av",
+                url: config.apiUrl + (config.apiUrl.endsWith("/") ? "" : "/") + "monitor?item=av,title",
                 responseType: "json"
             }).then(data => {
-                this.setState({monitoring: data.data.map(a => a[0])});
+                this.setState({monitoring: data.data});
             })
         }
         fetchAndDisplay();
@@ -53,8 +53,8 @@ class Sider extends React.Component{
 
     render() {
         let navItems=this.state.monitoring.map(av=>
-            <NavLink to={"/av/"+av} key={av} activeClassName="selected">
-                {"AV"+av}
+            <NavLink to={"/av/"+av[0]} key={av[0]} activeClassName="selected">
+                {"AV"+av[0]+" "+av[1]}
             </NavLink>
         );
         return <nav className={"sider"}>
