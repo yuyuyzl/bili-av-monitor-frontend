@@ -109,6 +109,11 @@ class AVChart extends React.Component{
     render() {
         return <div className={"chart"}>
             <ReactEcharts option={this.state.option} style={{height: '100%', width: '100%'}}/>
+            <div className={"options-buttons"}>
+                <a href={"https://www.bilibili.com/video/av"+this.props.av} target="_blank" rel="noopener noreferrer">前往视频</a>
+                <a href={"#"}>停(WIP)</a>
+                <div className={"icon"}><div className={"iconinner"}>+</div></div>
+            </div>
         </div>;
     }
 }
