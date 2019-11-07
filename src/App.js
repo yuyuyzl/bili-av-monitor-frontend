@@ -1,79 +1,73 @@
 import React from 'react';
-import './App.css';
 import Axios from "axios";
-import ReactEcharts from "echarts-for-react";
+import './App.css';
+import AVChart from "./AVChart";
+import { BrowserRouter, Route, Link,NavLink } from "react-router-dom";
+import config from "./config";
 
 class App extends React.Component {
-    constructor(...args) {
-        super(...args);
-        this.state = {};
-    }
 
-    componentDidMount() {
-        const fetchAndDisplay=()=> {
-            const url = new URL(window.location.href);
-            Axios({url: url.protocol+"//" + url.pathname + url.search, responseType: "json"}).then(data => {
-                    console.log(data.data);
-                    const category = url.search.match(/item=([^&]+)/).pop().split(",");
-                    let timeStart = category[0] === 'time';
-                    let series;
-                    if (timeStart) {
-                        category.shift();
-                        series = category.map(name => {
-                            return {
-                                name: name,
-                                type: 'line',
-                                showSymbol: false,
-                                hoverAnimation: false,
-                                data: []
-                            }
-                        });
-                        data.data.forEach(line => {
-                            const time = line.shift();
-                            line.forEach((data, i) => series[i].data.push([time, data]));
-                        });
-                    }else {
-                        series=[{
-                            name: "Data",
-                            type: 'line',
-                            showSymbol: false,
-                            hoverAnimation: false,
-                            data: data.data
-                        }]
-                    }
-                    const option = {
-                        tooltip: {
-                            trigger: 'axis',
-                            axisPointer: {
-                                animation: false
-                            }
-                        },
-                        yAxis: {
-                            type: 'value'
-                        },
-                        xAxis: {
-                            type: timeStart?'time':"value"
-                        },
-                        sort: "none",
-                        series: series
-                    };
-                    this.setState({option: option});
-                    console.log(option);
-                }
-            );
-        }
-        fetchAndDisplay();
-        setInterval(fetchAndDisplay,60000);
-    }
 
     render() {
         return (
             <div className="App">
-                {this.state.option ? (
-                    <ReactEcharts option={this.state.option} style={{height: '100%', width: '100%'}}/>) : null}
+                <BrowserRouter>
+                    <Sider/>
+                    <div className={"main"}>
+                        <Route path='/' exact>
+                            <div>root page</div>
+                        </Route>
+                        <Route path='/av/:aid' render={(route)=>{
+                            return <AVChart key={route.match.params.aid} av={route.match.params.aid} item={["time","view","like","favorite","coin"]}/>
+                        }}/>
+                    </div>
+                </BrowserRouter>
             </div>
         )
     }
+}
+
+class Sider extends React.Component{
+    constructor(...args) {
+        super(...args);
+        this.state = {monitoring:[]};
+        this.interval=0;
+    }
+
+    componentDidMount() {
+        const fetchAndDisplay=()=> {
+            Axios({
+                url: config.apiUrl + (config.apiUrl.endsWith("/") ? "" : "/") + "monitor?item=av",
+                responseType: "json"
+            }).then(data => {
+                this.setState({monitoring: data.data.map(a => a[0])});
+            })
+        }
+        fetchAndDisplay();
+        this.interval=setInterval(fetchAndDisplay,60000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    render() {
+        let navItems=this.state.monitoring.map(av=>
+            <NavLink to={"/av/"+av} key={av} activeClassName="selected">
+                {"AV"+av}
+            </NavLink>
+        );
+        return <nav className={"sider"}>
+            <header>
+                Bilibili AV Monitor
+            </header>
+            <NavLink to="/" exact activeClassName="selected">
+                首页
+            </NavLink>
+            {navItems}
+        </nav>;
+    }
+
 }
 
 export default App;
