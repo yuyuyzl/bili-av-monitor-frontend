@@ -15,7 +15,10 @@ class App extends React.Component {
                     <Sider/>
                     <div className={"main"}>
                         <Route path='/' exact>
-                            <div>root page</div>
+                            <div className={"root"}>
+                                <h1>Bilibili AV Monitor</h1>
+                                <h3>OB yourself.</h3>
+                            </div>
                         </Route>
                         <Route path='/av/:aid' render={(route)=>{
                             return <AVChart key={route.match.params.aid} av={route.match.params.aid} item={["time","view","like","favorite","coin"]}/>
@@ -59,7 +62,7 @@ class Sider extends React.Component{
         );
         return <nav className={"sider"}>
             <header>
-                Bilibili AV Monitor
+                <span>Bilibili AV Monitor</span>
             </header>
             <div className={"sidermain"}>
                 <NavLink to="/" exact activeClassName="selected">

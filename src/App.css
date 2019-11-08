@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .sider header{
   box-sizing: border-box;
   width: 100%;
@@ -26,11 +27,33 @@
   font-weight: bold;
   letter-spacing: 0.05em;
 }
+@media (max-width: 960px) {
+    .sider{
+        width: 32px;
+        transition: width 0.5s;
+    }
+    .sider:hover{
+        width: 280px;
+    }
+    .sidermain{
+        display: none;
+    }
+    .sider header span{
+        display: none;
+    }
+    .sider:hover .sidermain{
+        display: block;
+    }
+    .sider:hover header span{
+        display: inline;
+    }
+}
 .sider .sidermain{
   flex-grow: 1;
   overflow-y: auto;
   padding: 16px 0;
 }
+
 .sidermain a{
   position: relative;
   z-index: 100;
@@ -124,4 +147,29 @@
   color: #FFFFFF;
   display: block;
   text-decoration: none;
+}
+
+.root{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.root h1{
+    font-variant-caps: petite-caps;
+    font-weight: 100;
+    color: #000;
+    font-size: 3rem;
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+    margin: 12px;
+}
+.root h3{
+    font-weight: 300;
+    color: #000;
+    margin: 0;
 }
