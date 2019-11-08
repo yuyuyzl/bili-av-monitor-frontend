@@ -9,6 +9,8 @@
   width: 280px;
   flex-shrink: 0;
   background-color: #eee;
+  display: flex;
+  flex-direction: column;
 }
 .sider header{
   box-sizing: border-box;
@@ -21,11 +23,15 @@
   line-height: 48px;
   font-size: 14px;
   padding-left: 32px;
-  margin-bottom: 16px;
   font-weight: bold;
   letter-spacing: 0.05em;
 }
-.sider a{
+.sider .sidermain{
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+.sidermain a{
   position: relative;
   z-index: 100;
   box-sizing: border-box;
@@ -45,13 +51,12 @@
   min-width: 100%;
 }
 
-.sider a:hover{
+.sidermain a:hover{
   background: #bbb;
-  width: max-content;
   box-shadow: 0 0 5px #00000033;
 }
 
-.sider .selected{
+.sidermain .selected{
   background: #ccc
 }
 

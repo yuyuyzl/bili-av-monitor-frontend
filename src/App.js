@@ -53,18 +53,20 @@ class Sider extends React.Component{
 
     render() {
         let navItems=this.state.monitoring.map(av=>
-            <NavLink to={"/av/"+av[0]} key={av[0]} activeClassName="selected">
-                {"AV"+av[0]+" "+av[1]}
+            <NavLink to={"/av/"+av[0]} key={av[0]} activeClassName="selected" title={av[1]+" AV"+av[0]}>
+                {av[1]+" AV"+av[0]}
             </NavLink>
         );
         return <nav className={"sider"}>
             <header>
                 Bilibili AV Monitor
             </header>
-            <NavLink to="/" exact activeClassName="selected">
-                首页
-            </NavLink>
-            {navItems}
+            <div className={"sidermain"}>
+                <NavLink to="/" exact activeClassName="selected">
+                    首页
+                </NavLink>
+                {navItems}
+            </div>
         </nav>;
     }
 
