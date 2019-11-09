@@ -20,6 +20,14 @@ class App extends React.Component {
                                 <h3>OB yourself.</h3>
                             </div>
                         </Route>
+                        <Route path="/admin">
+                            <AdminPage
+                                title={"添加/修改视频监视"}
+                                args={["secret","av","interval","expireDate","title"]}
+                                labels={["访问密码","AV号","检测间隔","过期时间","标题"]}
+                                action={"av"}
+                            />
+                        </Route>
                         <Route path='/av/:aid' render={(route)=>{
                             return <AVChart key={route.match.params.aid} av={route.match.params.aid} item={["time","view","like","favorite","coin"]}/>
                         }}/>
@@ -73,6 +81,45 @@ class Sider extends React.Component{
         </nav>;
     }
 
+}
+
+class AdminPage extends React.Component{
+    constructor(...args){
+        super(...args);
+        this.state={};
+        //this.props.args.forEach(a=>this.state[a]="");
+    }
+    render() {
+        const inputs=this.props.args.map((a,i)=>
+            <input
+                key={a}
+                placeholder={this.props.labels?this.props.labels[i]:a}
+                onChange={event => this.setState({[a]:event.target.value})}
+            />
+        );
+        return <div className={"admin"}>
+            <h2>{this.props.title}</h2>
+            {inputs}
+            <button onClick={async event => {
+                const button=event.target;
+                button.disabled="disabled";
+                const q={};
+                this.props.args.forEach(a=>{if(this.state[a])q[a]=this.state[a]});
+                q.action=this.props.action;
+                console.log(q);
+                try {
+                    console.log(await Axios({
+                        method:"get",
+                        url:(config.apiUrl + (config.apiUrl.endsWith("/") ? "" : "/") + "action"),
+                        params: q
+                    }));
+                }catch (e) {
+                    alert(e)
+                }
+                button.disabled="";
+            }}>提交</button>
+        </div>
+    }
 }
 
 export default App;
