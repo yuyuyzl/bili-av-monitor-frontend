@@ -31,27 +31,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-@media (max-width: 960px) {
-    .sider{
-        width: 32px;
-        transition: width 0.5s;
-    }
-    .sider:hover{
-        width: 280px;
-    }
-    .sidermain{
-        display: none;
-    }
-    .sider header span{
-        display: none;
-    }
-    .sider:hover .sidermain{
-        display: block;
-    }
-    .sider:hover header span{
-        display: inline;
-    }
-}
+
 .sider .sidermain{
   flex-grow: 1;
   overflow-y: auto;
@@ -203,4 +183,29 @@
 }
 .admin h2{
     font-weight: lighter;
+}
+
+@media (max-width: 960px) {
+    .sider{
+        width: 32px;
+        transition: width 0.5s;
+    }
+    .sider:hover{
+        width: 280px;
+    }
+    .sidermain{
+        display: none;
+    }
+    .sider header span{
+        display: none;
+    }
+    .sider:hover .sidermain{
+        display: block;
+    }
+    .sider:hover header span{
+        display: inline;
+    }
+    .admin{
+        padding-right: 32px;
+    }
 }
