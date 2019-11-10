@@ -52,6 +52,7 @@ class Sider extends React.Component{
                 responseType: "json"
             }).then(data => {
                 //this.setState({monitoring: data.data.data,updatedAt:new Date(data.data.updatedAt)});
+                console.log(data.data);
                 this.setState((state,props)=>{
                     return {
                         monitoring: [...data.data.data,...state.monitoring].filter((item,k,arr)=>{
