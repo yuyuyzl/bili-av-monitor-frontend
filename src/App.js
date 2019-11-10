@@ -41,17 +41,27 @@ class App extends React.Component {
 class Sider extends React.Component{
     constructor(...args) {
         super(...args);
-        this.state = {monitoring:[]};
+        this.state = {monitoring:[],updatedAt:new Date(0)};
         this.interval=0;
     }
 
     componentDidMount() {
         const fetchAndDisplay=()=> {
             Axios({
-                url: config.apiUrl + (config.apiUrl.endsWith("/") ? "" : "/") + "monitor?item=av,title",
+                url: config.apiUrl + (config.apiUrl.endsWith("/") ? "" : "/") + "monitor?item=av,title&after="+this.state.updatedAt.toISOString(),
                 responseType: "json"
             }).then(data => {
-                this.setState({monitoring: data.data});
+                //this.setState({monitoring: data.data.data,updatedAt:new Date(data.data.updatedAt)});
+                this.setState((state,props)=>{
+                    return {
+                        monitoring: [...data.data.data,...state.monitoring].filter((item,k,arr)=>{
+                            let res=true;
+                            for(let i=0;i<k;i++)res=res&&item[0]!==arr[i][0];
+                            return res;
+                        }),
+                        updatedAt:new Date(data.data.updatedAt)
+                    }
+                });
             })
         }
         fetchAndDisplay();
