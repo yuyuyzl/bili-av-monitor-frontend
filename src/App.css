@@ -30,6 +30,7 @@
     word-break: keep-all;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-shrink: 0;
 }
 
 .sider .sidermain{
