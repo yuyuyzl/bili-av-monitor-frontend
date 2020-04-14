@@ -12,7 +12,7 @@ class AVChart extends React.Component{
 
     componentDidMount() {
         const fetchAndDisplay=()=> {
-            Axios({url: config.apiUrl+(config.apiUrl.endsWith("/")?"":"/")+this.props.av+"?item="+this.props.item.join(",")+"&after="+this.state.updatedAt.toISOString(), responseType: "json"}).then(data => {
+            Axios({url: config.apiUrl+(config.apiUrl.endsWith("/")?"":"/")+this.props.bvid+"?item="+this.props.item.join(",")+"&after="+this.state.updatedAt.toISOString(), responseType: "json"}).then(data => {
                     this.setState((state,props)=>{
                         console.log(data.data);
                         const newData=[...state.data,...data.data.data];
@@ -116,7 +116,7 @@ class AVChart extends React.Component{
         return <div className={"chart"}>
             <ReactEcharts option={this.state.option} style={{height: '100%', width: '100%'}}/>
             <div className={"options-buttons"}>
-                <a href={"https://www.bilibili.com/video/av"+this.props.av} target="_blank" rel="noopener noreferrer">前往视频</a>
+                <a href={"https://www.bilibili.com/video/"+this.props.bvid} target="_blank" rel="noopener noreferrer">前往视频</a>
                 <a href={"#"}>停(WIP)</a>
                 <div className={"icon"}><div className={"iconinner"}>+</div></div>
             </div>

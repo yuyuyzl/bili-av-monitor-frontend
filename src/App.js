@@ -16,11 +16,11 @@ class App extends React.Component {
                     <div className={"main"}>
                         <Route path='/' exact>
                             <div className={"root"}>
-                                <h1>Bilibili AV Monitor</h1>
+                                <h1>Bilibili BV Monitor</h1>
                                 <h3>OB yourself.</h3>
                             </div>
                         </Route>
-                        <Route path="/admin">
+                        <Route path="/admin" exact>
                             <AdminPage
                                 title={"添加/修改视频监视"}
                                 args={["secret","av","interval","expireDate","title"]}
@@ -28,8 +28,8 @@ class App extends React.Component {
                                 action={"av"}
                             />
                         </Route>
-                        <Route path='/av/:aid' render={(route)=>{
-                            return <AVChart key={route.match.params.aid} av={route.match.params.aid} item={["time","view","like","favorite","coin"]}/>
+                        <Route path='/BV:bvid' render={(route)=>{
+                            return <AVChart key={"BV"+route.match.params.bvid} bvid={"BV"+route.match.params.bvid} item={["time","view","like","favorite","coin"]}/>
                         }}/>
                     </div>
                 </BrowserRouter>
@@ -48,7 +48,7 @@ class Sider extends React.Component{
     componentDidMount() {
         const fetchAndDisplay=()=> {
             Axios({
-                url: config.apiUrl + (config.apiUrl.endsWith("/") ? "" : "/") + "monitor?item=av,title&after="+this.state.updatedAt.toISOString(),
+                url: config.apiUrl + (config.apiUrl.endsWith("/") ? "" : "/") + "monitor?item=bvid,title&after="+this.state.updatedAt.toISOString(),
                 responseType: "json"
             }).then(data => {
                 //this.setState({monitoring: data.data.data,updatedAt:new Date(data.data.updatedAt)});
@@ -75,13 +75,13 @@ class Sider extends React.Component{
 
     render() {
         let navItems=this.state.monitoring.map(av=>
-            <NavLink to={"/av/"+av[0]} key={av[0]} activeClassName="selected" title={av[1]+" AV"+av[0]}>
-                {av[1]+" AV"+av[0]}
+            <NavLink to={"/"+av[0]} key={av[0]} activeClassName="selected" title={av[1]+" "+av[0]}>
+                {av[1]+" "+av[0]}
             </NavLink>
         );
         return <nav className={"sider"}>
             <header>
-                <span>Bilibili AV Monitor</span>
+                <span>Bilibili BV Monitor</span>
             </header>
             <div className={"sidermain"}>
                 <NavLink to="/" exact activeClassName="selected">
