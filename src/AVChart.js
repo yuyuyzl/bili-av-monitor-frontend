@@ -2,6 +2,7 @@ import React from "react";
 import Axios from "axios";
 import ReactEcharts from "echarts-for-react";
 import config from "./config";
+import moment from "moment";
 
 class AVChart extends React.Component{
     constructor(...args) {
@@ -69,7 +70,37 @@ class AVChart extends React.Component{
                                 trigger: 'axis',
                                 axisPointer: {
                                     animation: false
+                                },
+                                formatter: (params)=> {
+                                    //console.log(params);
+                                    const paramsMap=Object.fromEntries(params.map(o=>[o.seriesName,o]));
+                                    //console.log(series);
+                                    const seriesMap=Object.fromEntries(series.map(o=>[o.name,o]));
+                                    //console.log(seriesMap['播放'].data[paramsMap['播放'].dataIndex]);
+                                    const getValueBefore=(...duration)=>{
+                                        const time=moment(params[0].axisValue).subtract(...duration);
+                                        let i=paramsMap['播放'].dataIndex;
+                                        while (time.valueOf()<moment(seriesMap['播放'].data[i][0]).valueOf()){
+                                            i--;
+                                            if (i<0)return undefined;
+                                        }
+                                        let dl=time.valueOf()-moment(seriesMap['播放'].data[i][0]).valueOf();
+                                        let dr=-time.valueOf()+moment(seriesMap['播放'].data[i+1][0]).valueOf();
+                                        //console.log(dl,dr,seriesMap['播放'].data[i]);
+                                        return (seriesMap['播放'].data[i+1][1]*dl+seriesMap['播放'].data[i][1]*dr)/(dl+dr);
+                                    };
+                                    return `
+<b>${moment(params[0].axisValue).format("H:mm:ss MM-DD")}</b> ${moment(params[0].axisValue).fromNow()}
+<br>
+${params.map(o=>`${o.data[1]}${o.seriesName}`).join(" / ")}
+<br>
+${[[600,"10m"],[60*60,"1h"],[60*60*24,"24h"]].map(t=>{
+    const ans=((paramsMap['播放'].data[1]-getValueBefore(t[0],'s'))*60*60/t[0]).toFixed(2);
+    return ans==="NaN"?undefined:`${t[1]}增速 ${ans}/h`;
+}).filter(o=>o).join('<br>')}
+`
                                 }
+
                             },
                             legend: {
                                 data: category.map(name=>categoryTrans[name]),
