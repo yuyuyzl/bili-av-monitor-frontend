@@ -3,6 +3,7 @@ import Axios from "axios";
 import ReactEcharts from "echarts-for-react";
 import config from "./config";
 import moment from "moment";
+import {AVInfo} from "./AVInfo";
 
 class AVChart extends React.Component{
     constructor(...args) {
@@ -94,6 +95,8 @@ class AVChart extends React.Component{
 <br>
 ${params.map(o=>`${o.data[1]}${o.seriesName}`).join(" / ")}
 <br>
+收藏率 ${(paramsMap['收藏'].data[1]*100/paramsMap['播放'].data[1]).toFixed(2)}%
+<br>
 ${[[600,"10m"],[60*60,"1h"],[60*60*24,"24h"]].map(t=>{
     const ans=((paramsMap['播放'].data[1]-getValueBefore(t[0],'s'))*60*60/t[0]).toFixed(2);
     return ans==="NaN"?undefined:`${t[1]}增速 ${ans}/h`;
@@ -145,10 +148,10 @@ ${[[600,"10m"],[60*60,"1h"],[60*60*24,"24h"]].map(t=>{
 
     render() {
         return <div className={"chart"}>
-            <ReactEcharts option={this.state.option} style={{height: '100%', width: '100%'}}/>
+            <AVInfo data={this.state.data} item={this.props.item}/>
+            <ReactEcharts option={this.state.option} className='echart'/>
             <div className={"options-buttons"}>
                 <a href={"https://www.bilibili.com/video/"+this.props.bvid} target="_blank" rel="noopener noreferrer">前往视频</a>
-                <a href={"#"}>停(WIP)</a>
                 <div className={"icon"}><div className={"iconinner"}>+</div></div>
             </div>
         </div>;
